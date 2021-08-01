@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const User = require("../../models/User");
+const UserDataGame = require("../../models/UserDataGame");
 const Joi = require("@hapi/joi");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -41,9 +42,18 @@ router.post("/signup", async (req, res) => {
   try {
     const newUser = await user.save();
 
+    const userData = new UserDataGame({
+      email: newUser.email,
+      points: 0,
+      level: "noob",
+      time: 45,
+    });
+
+    userData.save();
+
     const jwtToken = jwt.sign(
       {
-        name: newUser.name,
+        name: newUser.fullName,
         email: newUser.email,
         id: newUser._id,
       },
