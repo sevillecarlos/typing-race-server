@@ -1,5 +1,4 @@
 module.exports = (completeWords) => {
-  console.log(completeWords);
-  let point = Math.round(completeWords / (completeWords * 2));
+  let point = Math.round(completeWords / 3);
   return point;
 };

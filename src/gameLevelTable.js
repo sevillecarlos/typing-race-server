@@ -1,25 +1,25 @@
-module.exports = (gamePoint, prevLevel, timer) => {
+module.exports = (gamePoint, userPoints, prevLevel, timer) => {
   let level = prevLevel;
-  let points = gamePoint;
+  let points = gamePoint + userPoints;
   let time = timer;
 
   switch (prevLevel) {
     case "noob":
-      if (gamePoint > 2) {
+      if (points >= 50) {
         level = "pro";
         points = 0;
         time = 40;
       }
       break;
     case "pro":
-      if (gamePoint > 3) {
+      if (points >= 60) {
         level = "master";
         points = 0;
         time = 35;
       }
       break;
     case "master":
-      if (gamePoint > 3) {
+      if (points >= 70) {
         level = "leave your mom basement please";
         points = 0;
         time = 30;

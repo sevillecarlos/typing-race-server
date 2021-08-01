@@ -2,11 +2,14 @@ const router = require("express").Router();
 const UserDataGame = require("../../models/UserDataGame");
 const gamePointsTable = require("../../src/gamePointsTable");
 const gameLevelTable = require("../../src/gameLevelTable");
+
+
 //add game data for the user
 router.post("/add-user-game-data", async (req, res) => {
   const { email, completeWords } = req.body;
 
   const userPoint = gamePointsTable(completeWords);
+
   const user = await UserDataGame.find({
     email: email,
   });
@@ -14,17 +17,14 @@ router.post("/add-user-game-data", async (req, res) => {
   const [userData] = user;
 
   const { points, level, time } = gameLevelTable(
+    userPoint,
     userData.points,
     userData.level,
     userData.time
   );
 
-  console.log(points);
-  console.log(level);
-  console.log(time);
-
   try {
-    userData.points += userPoint;
+    userData.points = points;
     userData.level = level;
     userData.time = time;
 
