@@ -3,7 +3,6 @@ const UserDataGame = require("../../models/UserDataGame");
 const gamePointsTable = require("../../src/gamePointsTable");
 const gameLevelTable = require("../../src/gameLevelTable");
 
-
 //add game data for the user
 router.post("/add-user-game-data", async (req, res) => {
   const { email, completeWords } = req.body;
@@ -42,6 +41,21 @@ router.post("/get-user-data-game", async (req, res) => {
   try {
     if (user) {
       res.json({ user });
+    }
+  } catch (error) {
+    res.json({ error });
+  }
+});
+
+router.put("/restart-game", async (req, res) => {
+  const { email } = req.body;
+  const user = await UserDataGame.findOne({ email: email });
+  try {
+    if (user) {
+      user.points = 0;
+      user.level = "noob";
+      user.time = 45;
+      if (user.save()) res.json({ user });
     }
   } catch (error) {
     res.json({ error });

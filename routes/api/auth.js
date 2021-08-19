@@ -49,7 +49,7 @@ const signInValidate = Joi.object({
 });
 
 //register
-router.post("/signup", upload.array("imagesArray", 8), async (req, res) => {
+router.post("/signup", upload.array("userPhoto", 8), async (req, res) => {
   const reqFiles = [];
 
   const url = req.protocol + "://" + req.get("host");
@@ -72,7 +72,7 @@ router.post("/signup", upload.array("imagesArray", 8), async (req, res) => {
   user.fullName = req.body.fullName;
   user.email = req.body.email;
   user.password = password;
-  user.imagesArray = reqFiles;
+  user.userPhoto = reqFiles;
 
   const existEmail = await User.findOne({ email: req.body.email });
 
@@ -82,9 +82,6 @@ router.post("/signup", upload.array("imagesArray", 8), async (req, res) => {
 
   try {
     const newUser = await user.save();
-
-
-
     const userData = new UserDataGame({
       email: newUser.email,
       points: 0,
@@ -98,7 +95,7 @@ router.post("/signup", upload.array("imagesArray", 8), async (req, res) => {
       {
         name: newUser.fullName,
         email: newUser.email,
-        id: newUser._id,
+        userPhoto: user.userPhoto,
       },
       process.env.TOKEN_SECRET
     );
@@ -130,6 +127,7 @@ router.post("/signin", async (req, res) => {
     {
       email: user.email,
       name: user.fullName,
+      userPhoto: user.userPhoto,
     },
     process.env.TOKEN_SECRET
   );
@@ -144,7 +142,6 @@ router.post("/signin", async (req, res) => {
 
 router.post("/get-user", async (req, res) => {
   const user = await User.findOne({ _id: req.body._id });
-  console.log(user);
   try {
     res.json({
       email: user.email,
@@ -152,7 +149,7 @@ router.post("/get-user", async (req, res) => {
     });
   } catch (err) {
     res.json({
-      error: "malo",
+      error: err,
     });
   }
 });

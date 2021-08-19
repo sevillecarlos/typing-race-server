@@ -16,7 +16,7 @@ app.use(cors());
 app.use(express.static(__dirname + "/public"));
 app.use(express.json());
 app.use(auth).use(userDataGame);
-
+app.use('/upload', express.static('upload')); 
 
 /////////////////////////////////////////////////////
 app.get("/", (req, res) => {
