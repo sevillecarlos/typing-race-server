@@ -4,7 +4,38 @@ const UserDataGame = require("../../models/UserDataGame");
 const Joi = require("@hapi/joi");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const fs = require("fs");
+const multer = require("multer");
+const { v4: uuidv4 } = require("uuid");
+
+const DIR = "./upload/";
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, DIR);
+  },
+  filename: (req, file, cb) => {
+    const fileName = file.originalname.toLowerCase().split(" ").join("-");
+    cb(null, uuidv4() + "-" + fileName);
+  },
+});
+
+var upload = multer({
+  storage: storage,
+  fileFilter: (req, file, cb) => {
+    if (
+      file.mimetype == "image/png" ||
+      file.mimetype == "image/jpg" ||
+      file.mimetype == "image/jpeg"
+    ) {
+      cb(null, true);
+    } else {
+      cb(null, false);
+      return cb(new Error("File type not accepted (.png, .jpg, .jpeg)"));
+    }
+  },
+});
+
+////////////////////////////////////////////////////////////////
 
 const signUpValidate = Joi.object({
   fullName: Joi.string().min(6).max(255).required(),
@@ -18,9 +49,17 @@ const signInValidate = Joi.object({
 });
 
 //register
-router.post("/signup", async (req, res) => {
+router.post("/signup", upload.array("imagesArray", 8), async (req, res) => {
+  const reqFiles = [];
+
+  const url = req.protocol + "://" + req.get("host");
+
+  for (var i = 0; i < req.files.length; i++) {
+    reqFiles.push(url + "/upload/" + req.files[i].filename);
+  }
+
   const { error } = signUpValidate.validate(req.body);
-  console.log(req.body);
+
   if (error) {
     return res.status(400).json({ error: error.details[0].message });
   }
@@ -30,18 +69,21 @@ router.post("/signup", async (req, res) => {
 
   const user = new User();
   // user.userPhoto = req.body.userPhoto;
-  user.fullName = req.body.fullName
-  user.email = req.body.email
+  user.fullName = req.body.fullName;
+  user.email = req.body.email;
   user.password = password;
+  user.imagesArray = reqFiles;
 
   const existEmail = await User.findOne({ email: req.body.email });
 
   if (existEmail) {
-    return res.status(400).json({ error: "Email already exist" });
+    return res.json({ error: "Email already exist" });
   }
 
   try {
     const newUser = await user.save();
+
+
 
     const userData = new UserDataGame({
       email: newUser.email,
@@ -75,15 +117,14 @@ router.post("/signin", async (req, res) => {
   if (error) return res.status(400).json({ error: error.details[0].message });
 
   const user = await User.findOne({ email: req.body.email });
-  if (!user) return res.status(400).json({ error: "User don't exist" });
+  if (!user) return res.json({ error: "User don't exist" });
 
   const confirmPassword = await bcrypt.compare(
     req.body.password,
     user.password
   );
 
-  if (!confirmPassword)
-    return res.status(400).json({ error: "Incorrect password" });
+  if (!confirmPassword) return res.json({ error: "Incorrect password" });
 
   const jwtToken = jwt.sign(
     {
@@ -92,10 +133,13 @@ router.post("/signin", async (req, res) => {
     },
     process.env.TOKEN_SECRET
   );
-
-  res.header("auth-token", jwtToken).json({
-    jwtToken,
-  });
+  try {
+    res.header("auth-token", jwtToken).json({
+      jwtToken,
+    });
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 router.post("/get-user", async (req, res) => {
@@ -107,7 +151,9 @@ router.post("/get-user", async (req, res) => {
       name: user.fullName,
     });
   } catch (err) {
-    console.log(err);
+    res.json({
+      error: "malo",
+    });
   }
 });
 module.exports = router;

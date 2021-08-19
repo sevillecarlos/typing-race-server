@@ -20,12 +20,12 @@ module.exports = (gamePoint, userPoints, prevLevel, timer) => {
       break;
     case "master":
       if (points >= 70) {
-        level = "leave your mom basement please";
+        level = "hacker";
         points = 0;
         time = 30;
       }
       break;
-    case "leave your mom basement please":
+    case "hacker":
       break;
     default:
       break;
