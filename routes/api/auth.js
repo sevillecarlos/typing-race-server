@@ -25,7 +25,8 @@ var upload = multer({
     if (
       file.mimetype == "image/png" ||
       file.mimetype == "image/jpg" ||
-      file.mimetype == "image/jpeg"
+      file.mimetype == "image/jpeg" ||
+      file.mimetype == "image/gif"
     ) {
       cb(null, true);
     } else {
@@ -38,14 +39,14 @@ var upload = multer({
 ////////////////////////////////////////////////////////////////
 
 const signUpValidate = Joi.object({
-  fullName: Joi.string().min(6).max(255).required(),
-  email: Joi.string().min(6).max(255).required().email(),
-  password: Joi.string().min(6).max(255).required(),
+  fullName: Joi.string().min(1).max(255).required(),
+  email: Joi.string().min(1).max(255).required().email(),
+  password: Joi.string().min(1).max(255).required(),
 });
 
 const signInValidate = Joi.object({
-  email: Joi.string().min(6).max(255).required().email(),
-  password: Joi.string().min(6).max(1024).required(),
+  email: Joi.string().min(1).max(255).required().email(),
+  password: Joi.string().min(1).max(1024).required(),
 });
 
 //register
@@ -67,20 +68,19 @@ router.post("/signup", upload.array("userPhoto", 8), async (req, res) => {
   const salt = await bcrypt.genSalt(10);
   const password = await bcrypt.hash(req.body.password, salt);
 
-  const user = new User();
-  // user.userPhoto = req.body.userPhoto;
-  user.fullName = req.body.fullName;
-  user.email = req.body.email;
-  user.password = password;
-  user.userPhoto = reqFiles;
-
-  const existEmail = await User.findOne({ email: req.body.email });
-
-  if (existEmail) {
-    return res.json({ error: "Email already exist" });
-  }
-
   try {
+    const user = new User();
+    user.fullName = req.body.fullName;
+    user.email = req.body.email;
+    user.password = password;
+    user.userPhoto = reqFiles;
+
+    const existEmail = await User.findOne({ email: req.body.email });
+
+    if (existEmail) {
+      return res.json({ error: "Email already exist" });
+    }
+
     const newUser = await user.save();
     const userData = new UserDataGame({
       email: newUser.email,
@@ -113,25 +113,26 @@ router.post("/signin", async (req, res) => {
   const { error } = signInValidate.validate(req.body);
   if (error) return res.status(400).json({ error: error.details[0].message });
 
-  const user = await User.findOne({ email: req.body.email });
-  if (!user) return res.json({ error: "User don't exist" });
-
-  const confirmPassword = await bcrypt.compare(
-    req.body.password,
-    user.password
-  );
-
-  if (!confirmPassword) return res.json({ error: "Incorrect password" });
-
-  const jwtToken = jwt.sign(
-    {
-      email: user.email,
-      name: user.fullName,
-      userPhoto: user.userPhoto,
-    },
-    process.env.TOKEN_SECRET
-  );
   try {
+    const user = await User.findOne({ email: req.body.email });
+    if (!user) return res.json({ error: "User don't exist" });
+
+    const confirmPassword = await bcrypt.compare(
+      req.body.password,
+      user.password
+    );
+
+    if (!confirmPassword) return res.json({ error: "Incorrect password" });
+
+    const jwtToken = jwt.sign(
+      {
+        email: user.email,
+        name: user.fullName,
+        userPhoto: user.userPhoto,
+      },
+      process.env.TOKEN_SECRET
+    );
+
     res.header("auth-token", jwtToken).json({
       jwtToken,
     });

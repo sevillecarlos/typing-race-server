@@ -9,20 +9,20 @@ router.post("/add-user-game-data", async (req, res) => {
 
   const userPoint = gamePointsTable(completeWords);
 
-  const user = await UserDataGame.find({
-    email: email,
-  });
-
-  const [userData] = user;
-
-  const { points, level, time } = gameLevelTable(
-    userPoint,
-    userData.points,
-    userData.level,
-    userData.time
-  );
-
   try {
+    const user = await UserDataGame.find({
+      email: email,
+    });
+
+    const [userData] = user;
+
+    const { points, level, time } = gameLevelTable(
+      userPoint,
+      userData.points,
+      userData.level,
+      userData.time
+    );
+
     userData.points = points;
     userData.level = level;
     userData.time = time;
@@ -37,8 +37,9 @@ router.post("/add-user-game-data", async (req, res) => {
 
 router.post("/get-user-data-game", async (req, res) => {
   const { email } = req.body;
-  const user = await UserDataGame.findOne({ email: email });
   try {
+    const user = await UserDataGame.findOne({ email: email });
+
     if (user) {
       res.json({ user });
     }
@@ -49,8 +50,9 @@ router.post("/get-user-data-game", async (req, res) => {
 
 router.put("/restart-game", async (req, res) => {
   const { email } = req.body;
-  const user = await UserDataGame.findOne({ email: email });
   try {
+    const user = await UserDataGame.findOne({ email: email });
+
     if (user) {
       user.points = 0;
       user.level = "noob";
