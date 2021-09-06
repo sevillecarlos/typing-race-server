@@ -8,9 +8,15 @@
     "start": "nodemon index.js",
     "lint": "eslint index.js"
   },
+  "keywords": [
+    "heroku"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sevillecarlos/typing-race-beckend.git"
+  },
+  "engines": {
+    "node": "14.x"
   },
   "author": "Carlos A. Sevilla",
   "license": "ISC",
