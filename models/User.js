@@ -1,6 +1,10 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
-const userSchema = mongoose.Schema({
+const userSchema = mongoose.Schema(
+  {
+    userPhoto: {
+      type: Array,
+    },
     fullName: {
       type: String,
       required: true,
@@ -22,6 +26,7 @@ const userSchema = mongoose.Schema({
       type: Date,
       default: Date.now,
     },
-  });
-  
-  module.exports = mongoose.model("User", userSchema);
+  }
+);
+
+module.exports = mongoose.model("User", userSchema);
