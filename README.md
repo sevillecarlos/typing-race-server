@@ -1,5 +1,5 @@
 # Typing Race Server
-The server for Typing Race app.
+The server for the Typing Race app.
 # Built
 ## Development Technologies
 - Node.js
@@ -20,7 +20,7 @@ npm install
 ```
 npm run serve
 ```
-### Create your .env file for the Environment Variables
+### Create your .env file for the environment variables
 * *USER_DB*
 * *PASSWORD_DB*
 * *DATABASE_NAME*
