@@ -21,9 +21,9 @@ npm install
 npm run serve
 ```
 ### Create your .env file for the Environment Variables
-*USER_DB
-*PASSWORD_DB
-*DATABASE_NAME
+* *USER_DB*
+* *PASSWORD_DB*
+* *DATABASE_NAME*
 
 ## Typing Race Server
 Navigate to [Typing Race ](https://github.com/sevillecarlos/typing-race) to found the app.
