@@ -35,7 +35,7 @@ Navigate to [Typing Race ](https://github.com/sevillecarlos/typing-race) to foun
 
 # Contributing
 Contributions, issues and feature requests are welcome!
-Feel free to check the [Issues Page](https://github.com/sevillecarlos/typing-race/issues).
+Feel free to check the [Issues Page](https://github.com/sevillecarlos/typing-race-server/issues).
 
 # License
 This project is [MIT](https://opensource.org/licenses/MIT) licensed.
