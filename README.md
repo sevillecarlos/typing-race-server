@@ -25,7 +25,7 @@ npm run serve
 * *PASSWORD_DB*
 * *DATABASE_NAME*
 
-## Typing Race Server
+## Typing Race App
 Navigate to [Typing Race ](https://github.com/sevillecarlos/typing-race) to found the app.
 
 # Author
