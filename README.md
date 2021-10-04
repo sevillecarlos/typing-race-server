@@ -3,8 +3,8 @@
 # Built
 ## Development Technologies
 ![](https://img.shields.io/badge/Back--End-Express.js-gray)
-![](https://img.shields.io/badge/Back--End-NodeJS.js-green)
-![](https://img.shields.io/badge/Programming--Language-JavaScript.js-yellow)
+![](https://img.shields.io/badge/Back--End-NodeJS-green)
+![](https://img.shields.io/badge/Programming--Language-JavaScript-yellow)
 
 ## Database
 ![](https://img.shields.io/badge/Database-MongoDB.js-green)
