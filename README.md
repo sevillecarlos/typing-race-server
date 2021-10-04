@@ -2,10 +2,12 @@
 > The server for the Typing Race app.
 # Built
 ## Development Technologies
-- Node.js
-- Express.js
+![](https://img.shields.io/badge/Back--End-Express.js-gray)
+![](https://img.shields.io/badge/Back--End-NodeJS.js-green)
+![](https://img.shields.io/badge/Programming--Language-JavaScript.js-yellow)
+
 ## Database
-- MongoDB
+![](https://img.shields.io/badge/Database-MongoDB.js-green)
 
 # Getting Start
 ```
