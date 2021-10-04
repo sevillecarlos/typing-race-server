@@ -7,7 +7,7 @@
 ![](https://img.shields.io/badge/Programming--Language-JavaScript-yellow)
 
 ## Database
-![](https://img.shields.io/badge/Database-MongoDB.js-green)
+![](https://img.shields.io/badge/Database-MongoDB-green)
 
 # Getting Start
 ```
