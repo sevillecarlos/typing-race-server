@@ -1,5 +1,5 @@
 # Typing Race Server
-The server for the Typing Race app.
+> The server for the Typing Race app.
 # Built
 ## Development Technologies
 - Node.js
